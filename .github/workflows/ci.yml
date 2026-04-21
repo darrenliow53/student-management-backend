@@ -8,10 +8,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build-and-test:
     runs-on: ubuntu-latest
 
-    # This provides the database for your 'mvn test' step
     services:
       postgres:
         image: postgres:16.1-alpine
@@ -45,14 +44,18 @@ jobs:
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: soft@123!@#
 
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always() 
+        with:
+          name: test-reports
+          path: target/surefire-reports/
+
       - name: Build Docker image
         run: docker compose build
 
       - name: Start containers
         run: docker compose up -d
-
-      - name: Check running containers
-        run: docker ps
 
       - name: Stop containers
         run: docker compose down
