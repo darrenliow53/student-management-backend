@@ -8,6 +8,8 @@ services:
     container_name: app
     depends_on:
       - db
+    ports:
+      - "8080:8025"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/student_management
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -19,3 +21,4 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=soft@123!@#
+      - POSTGRES_DB=student_management
